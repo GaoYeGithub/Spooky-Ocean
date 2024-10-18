@@ -1,5 +1,5 @@
 # Toronto CounterSpell
-Helped coded website for Toronto CounterSpell
+Helped coded website for Toronto CounterSpell. Note: Some section are not merged into main website branch.
 
 ## Added Features
 - Custom Copy and Paste Gmail section
