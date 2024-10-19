@@ -86,9 +86,9 @@
             if (!isPlaying) {
                 startAudio();
             } else {
-                oscillator.stop();
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                 isPlaying = false;
-                document.getElementById('audioButton').textContent = 'Start Experience';
+                document.getElementById('audioButton').textContent = 'Unmute';
             }
         }
 
@@ -194,7 +194,23 @@
                 const volume = 0.1 + (scrollPercent * 0.1);
                 gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
             }
+
+            if (isAudioOn) {
+                const baseFreq = 220;
+                const maxFreq = 880;
+                const frequency = baseFreq + (scrollPercent * (maxFreq - baseFreq));
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                
+                const volume = 0.1 + (scrollPercent * 0.2);
+                gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            }
+
         });
+        document.addEventListener('click', function() {
+            if (!isAudioOn) {
+                startAudio();
+            }
+        }, { once: true });
     </script>
 </body>
 </html>
