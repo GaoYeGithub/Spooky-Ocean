@@ -8,10 +8,15 @@
 </head>
 <body>
     <div class="wave-container">
-        <div class="wave wave1"></div>
-        <div class="wave wave2"></div>
-        <div class="wave wave3"></div>
+        <div class="wave1"></div>
+        <div class="wave2"></div>
+        <div class="wave3"></div>
     </div>
+
+    <div class="horror-cue tentacle" id="leftTentacle" style="left: -50px; top: 50%; transform: translateY(-50%);"></div>
+    <div class="horror-cue tentacle" id="rightTentacle" style="right: -50px; top: 50%; transform: translateY(-50%) scaleX(-1);"></div>
+    <div class="horror-cue eye" id="leftEye" style="left: 10%; top: 70%;"></div>
+    <div class="horror-cue eye" id="rightEye" style="right: 10%; top: 70%;"></div>
     
     <div class="content">
         <h1>Spooky Ocean</h1>
@@ -52,6 +57,7 @@
         let oscillator = null;
         let gainNode = null;
         let isPlaying = false;
+        let isAudioOn = false;
 
         function setupAudio() {
             oscillator = audioContext.createOscillator();
@@ -66,12 +72,19 @@
             gainNode.connect(audioContext.destination);
         }
 
-        function toggleAudio() {
-            if (!isPlaying) {
+        function startAudio() {
+            if (!isAudioOn) {
                 setupAudio();
                 oscillator.start();
+                isAudioOn = true;
                 isPlaying = true;
                 document.getElementById('audioButton').textContent = 'Mute';
+            }
+        }
+
+        function toggleAudio() {
+            if (!isPlaying) {
+                startAudio();
             } else {
                 oscillator.stop();
                 isPlaying = false;
@@ -126,6 +139,15 @@
             document.body.appendChild(bubble);
         }
 
+        function showHorrorCue(element, duration) {
+            element.style.opacity = '0.7';
+            setTimeout(() => {
+                element.style.opacity = '0';
+            }, duration);
+        }
+
+        window.addEventListener('load', startAudio);
+
         window.addEventListener('scroll', function() {
             const maxDepth = 36000;
             const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
@@ -144,8 +166,19 @@
             content.style.opacity = 1 - (scrollPercent * 30);
             
             if (currentDepth > 0 && currentDepth < 35000) {
-                const spawnRate = Math.max(50, 500 - (currentDepth / 50));
+                const spawnRate = Math.max(10, 100 - (currentDepth / 200));
                 if (Math.random() < 1/spawnRate) createBubble();
+            }
+            
+            if (currentDepth > 15000 && currentDepth < 35000) {
+                if (Math.random() < 0.05) {
+                    const cue = Math.random() < 0.5 ? document.getElementById('leftTentacle') : document.getElementById('rightTentacle');
+                    showHorrorCue(cue, 500);
+                }
+                if (Math.random() < 0.03) {
+                    const eye = Math.random() < 0.5 ? document.getElementById('leftEye') : document.getElementById('rightEye');
+                    showHorrorCue(eye, 300);
+                }
             }
             
             if (currentDepth >= 35900) {

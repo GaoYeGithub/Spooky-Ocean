@@ -24,6 +24,31 @@ body {
     pointer-events: none;
 }
 
+.horror-cue {
+    position: fixed;
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+.tentacle {
+    position: fixed;
+    width: 100px;
+    height: 300px;
+    background: url('https://cloud-fygq03rqq-hack-club-bot.vercel.app/0image-removebg-preview.png') no-repeat;
+    background-size: contain;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+.eye {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, red 30%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
 .wave {
     position: absolute;
     width: 200%;
